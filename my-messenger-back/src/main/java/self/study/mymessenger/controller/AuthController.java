@@ -21,7 +21,8 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserDTO user) {
         try {
-            return ResponseEntity.ok(authService.signupUser(user.getUsername(), user.getPassword()));
+            authService.signupUser(user.getUsername(), user.getPassword());
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -33,7 +34,7 @@ public class AuthController {
         try {
             return ResponseEntity.ok(authService.loginUser(user.getUsername(), user.getPassword()));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

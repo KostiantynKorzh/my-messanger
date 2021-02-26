@@ -3,7 +3,7 @@ import {Button, Container, Form} from "react-bootstrap";
 import Header from "./Header";
 import AuthService from '../service/auth-service';
 
-const Login = () => {
+const Login = (props) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -30,7 +30,11 @@ const Login = () => {
                     <Button variant="primary" type="submit"
                             onClick={(e) => {
                                 e.preventDefault();
-                                AuthService.login(username, password);
+                                AuthService.login(username, password)
+                                    .then(() => {
+                                        props.history.push("/main");
+                                        window.location.reload();
+                                    });
                             }}>
                         Login
                     </Button>

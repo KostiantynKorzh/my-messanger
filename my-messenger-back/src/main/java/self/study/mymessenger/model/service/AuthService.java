@@ -52,12 +52,12 @@ public class AuthService {
                     .token(jwt)
                     .build();
         } catch (AuthenticationException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
 
-    public UserDTO signupUser(String username, String password) {
+    public void signupUser(String username, String password) {
 
         User user = User.builder()
                 .username(username)
@@ -65,11 +65,12 @@ public class AuthService {
                 .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
                 .build();
 
-        System.out.println(userRepository.save(user));
-        return UserDTO.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .build();
+        userRepository.save(user);
+
+//        return UserDTO.builder()
+//                .username(user.getUsername())
+//                .password(user.getPassword())
+//                .build();
     }
 
 }

@@ -4,13 +4,29 @@ import Constants from "../Constants";
 const API_AUTH = Constants.API_URL + '/auth';
 
 const login = (username, password) => {
-    axios.post(API_AUTH + '/login', {
+    return axios.post(API_AUTH + '/login', {
         username: username,
         password: password
-    }).then(() => console.log("Successfully logged in"))
-        .catch(() => console.log("NOOOOOOO"))
+    }).then(resp => {
+        if (resp.data.token) {
+            localStorage.setItem("user", JSON.stringify(resp.data));
+        }
+    });
+};
+
+const logout = () => {
+    localStorage.removeItem("user");
+};
+
+const signup = (username, password) => {
+    axios.post(API_AUTH + '/signup', {
+        username: username,
+        password: password
+    });
 };
 
 export default {
-    login
+    login,
+    logout,
+    signup
 };
