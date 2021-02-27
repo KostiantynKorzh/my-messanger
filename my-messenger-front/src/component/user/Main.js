@@ -20,7 +20,7 @@ const Main = () => {
             <UserHeader/>
             {users.map(user =>
                 <div>
-                    <a href="/chat">{user.username}</a>
+                    <a href={`/chat/${user.id}`}>{user.username}</a>
                 </div>
             )}
         </div>
