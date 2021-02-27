@@ -1,4 +1,4 @@
-package self.study.mymessenger.model.service;
+package self.study.mymessenger.model.user_details;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

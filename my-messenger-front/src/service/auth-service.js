@@ -1,10 +1,8 @@
 import axios from 'axios';
-import Constants from "../Constants";
-
-const API_AUTH = Constants.API_URL + '/auth';
+import Constants from "../utils/Constants";
 
 const login = (username, password) => {
-    return axios.post(API_AUTH + '/login', {
+    return axios.post(Constants.API_AUTH + '/login', {
         username: username,
         password: password
     }).then(resp => {
