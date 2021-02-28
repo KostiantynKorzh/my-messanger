@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import self.study.mymessenger.model.entity.ChatMessage;
+import self.study.mymessenger.model.service.ChatMessageService;
 import self.study.mymessenger.model.service.ChatRoomService;
 
 @Controller
@@ -14,6 +15,9 @@ public class ChatController {
 
     @Autowired
     private ChatRoomService chatRoomService;
+
+    @Autowired
+    private ChatMessageService chatMessageService;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -24,6 +28,8 @@ public class ChatController {
                 chatMessage.getReceiverId());
 
         chatMessage.setChatId(chatId);
+
+        chatMessageService.saveMessage(chatMessage);
 
         messagingTemplate.convertAndSendToUser(chatMessage.getReceiverId(),
                 "/queue/messages",
