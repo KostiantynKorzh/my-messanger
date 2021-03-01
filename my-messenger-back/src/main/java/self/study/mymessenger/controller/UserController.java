@@ -31,4 +31,13 @@ public class UserController {
         }
     }
 
+    @GetMapping("/username/{id}")
+    public ResponseEntity<?> getUsernameFromId(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(userService.getUsernameById(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

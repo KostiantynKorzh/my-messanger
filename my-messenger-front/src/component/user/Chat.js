@@ -4,6 +4,7 @@ import SockJS from "sockjs-client";
 import UserHeader from "./UserHeader";
 import {Container, Button, Form, ListGroup} from "react-bootstrap";
 import ChatService from '../../service/chat-service';
+import UserService from '../../service/user-service';
 
 let stompClient = null;
 
@@ -17,19 +18,31 @@ const Chat = (props) => {
 
     const chatEnd = useRef(null);
 
+    const [newMsgSent, setNewMsgSent] = useState(false);
+
+    const [username, setUsername] = useState('');
+
     useEffect(() => {
         connect();
-        getAllMessages();
-        scrollToLastMessage();
+        getAllMessages()
+            .then(() => scrollToLastMessage());
+        UserService.getUsernameFromId(props.match.params.id)
+            .then(resp => {
+                setUsername(resp.data);
+            });
+
     }, [])
 
     useEffect(() => {
-        getAllMessages();
-        scrollToLastMessage();
-    }, [chat])
+        if (newMsgSent) {
+            getAllMessages()
+                .then(() => scrollToLastMessage());
+            setNewMsgSent(false);
+        }
+    }, [newMsgSent])
 
     const getAllMessages = () => {
-        ChatService.getChatMessages(senderId, props.match.params.id)
+        return ChatService.getChatMessages(senderId, props.match.params.id)
             .then(resp => {
                 setChat(resp.data);
             });
@@ -51,6 +64,7 @@ const Chat = (props) => {
                 console.log(resp);
                 let data = JSON.parse(resp.body);
                 setChat(prev => [...prev, data.content]);
+                setNewMsgSent(true);
             });
 
     };
@@ -70,6 +84,7 @@ const Chat = (props) => {
 
             stompClient.send("/app/chat", {}, JSON.stringify(message));
             setChat(prev => [...prev, message]);
+            setNewMsgSent(true);
         }
     };
 
@@ -80,48 +95,76 @@ const Chat = (props) => {
     }
 
     const scrollToLastMessage = () => {
-        chatEnd.current?.scrollIntoView();
+        chatEnd.current?.scrollIntoView({behavior: "smooth"});
     }
 
     return (
         <>
             <UserHeader/>
-            <div>Chat with {props.match.params.id}</div>
+            <div>Chat with {username}</div>
+            <div style={{
+                // backgroundColor: '#a8f1ff',
+            }}>
+                <Container>
+                    <ListGroup
+                        style={{
+                            display: 'inline-block',
+                            overflowY: "scroll",
+                            maxHeight: '70vh',
+                        }}>
+                        {chat.map((message, i) => {
+                            if (message.senderId == senderId) {
+                                return <ListGroup.Item id={i} className="text-right"
+                                                       style={{
+                                                           float: 'right',
+                                                           width: '51%',
+                                                           border: 'none',
+                                                           borderRadius: '4px',
+                                                           backgroundColor: '#a8ffb7',
+                                                           margin: '5px',
+                                                       }}>
+                                    {message.content}
+                                </ListGroup.Item>
+                            } else {
+                                return <ListGroup.Item id={i}
+                                                       style={{
+                                                           float: 'left',
+                                                           width: '51%',
+                                                           border: 'none',
+                                                           borderRadius: '4px',
+                                                           backgroundColor: '#ccffa8',
+                                                           margin: '5px',
+                                                       }}>
+                                    {message.content}</ListGroup.Item>
+                            }
+                        })}
+                        <div ref={chatEnd} style={{float: 'left',}}/>
+                    </ListGroup>
+                </Container>
 
-            <Container>
-                <ListGroup style={{overflowY: "scroll", maxHeight: '70vh'}}>
-                    {chat.map((message, i) => {
-                        if (message.senderId == senderId) {
-                            return <ListGroup.Item id={i} className="text-right">{message.content}</ListGroup.Item>
-                        } else {
-                            return <ListGroup.Item id={i}>{message.content}</ListGroup.Item>
-                        }
-                    })}
-                    <div ref={chatEnd}/>
-                </ListGroup>
-            </Container>
-
-            <Form>
-                <Form.Group controlId="message">
-                    <Form.Control type="text"
-                                  placeholder="Your message"
-                                  value={msg}
-                                  onKeyPress={(e) => {
-                                      if (e.charCode == 13) {
-                                          send(e);
-                                      }
-                                  }}
-                                  onChange={(e) => {
-                                      setMsg(e.target.value);
-                                  }}/>
-                </Form.Group>
-                <Button variant="primary"
-                        onClick={(e) => send(e)}>
-                    Submit
-                </Button>
-            </Form>
+                <Form>
+                    <Form.Group controlId="message">
+                        <Form.Control type="text"
+                                      placeholder="Your message"
+                                      value={msg}
+                                      onKeyPress={(e) => {
+                                          if (e.charCode == 13) {
+                                              send(e);
+                                          }
+                                      }}
+                                      onChange={(e) => {
+                                          setMsg(e.target.value);
+                                      }}/>
+                    </Form.Group>
+                    <Button variant="primary"
+                            onClick={(e) => send(e)}>
+                        Submit
+                    </Button>
+                </Form>
+            </div>
         </>
-    );
+    )
+        ;
 
 };
 

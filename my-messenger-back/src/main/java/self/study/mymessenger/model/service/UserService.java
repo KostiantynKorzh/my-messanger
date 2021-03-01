@@ -3,6 +3,7 @@ package self.study.mymessenger.model.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import self.study.mymessenger.model.dto.UserListDTO;
+import self.study.mymessenger.model.entity.User;
 import self.study.mymessenger.model.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class UserService {
                 .forEach(user ->
                         users.add(new UserListDTO(user.getId(), user.getUsername())));
         return users;
+    }
+
+    public String getUsernameById(String id) {
+        return userRepository.findById(id).get().getUsername();
     }
 
 }

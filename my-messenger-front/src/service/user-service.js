@@ -7,6 +7,12 @@ const getAllAvailableReceivers = (id) => {
         {headers: authHeader()});
 };
 
+const getUsernameFromId = (id) => {
+    return axios.get(Constants.API_USERS + 'username/' + id,
+        {headers: authHeader()});
+};
+
 export default {
-    getAllAvailableReceivers
+    getAllAvailableReceivers,
+    getUsernameFromId
 }
