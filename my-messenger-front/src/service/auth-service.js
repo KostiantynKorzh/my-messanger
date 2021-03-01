@@ -2,22 +2,22 @@ import axios from 'axios';
 import Constants from "../utils/Constants";
 
 const login = (username, password) => {
-    return axios.post(Constants.API_AUTH + '/login', {
+    return axios.post(Constants.API_AUTH + 'login', {
         username: username,
         password: password
     }).then(resp => {
         if (resp.data.token) {
-            localStorage.setItem("user", JSON.stringify(resp.data));
+            sessionStorage.setItem("user", JSON.stringify(resp.data));
         }
     });
 };
 
 const logout = () => {
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
 };
 
 const signup = (username, password) => {
-    axios.post(API_AUTH + '/signup', {
+    axios.post(Constants.API_AUTH + 'signup', {
         username: username,
         password: password
     });
