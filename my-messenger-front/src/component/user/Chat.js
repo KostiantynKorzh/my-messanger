@@ -5,6 +5,7 @@ import UserHeader from "./UserHeader";
 import {Container, Button, Form, ListGroup} from "react-bootstrap";
 import ChatService from '../../service/chat-service';
 import UserService from '../../service/user-service';
+import Message from "./Message";
 
 let stompClient = null;
 
@@ -108,34 +109,41 @@ const Chat = (props) => {
                 <Container>
                     <ListGroup
                         style={{
-                            display: 'inline-block',
+                            display: 'block',
                             overflowY: "scroll",
-                            maxHeight: '70vh',
+                            height: '70vh',
                         }}>
                         {chat.map((message, i) => {
                             if (message.senderId == senderId) {
                                 return <ListGroup.Item id={i} className="text-right"
                                                        style={{
+                                                           width: '65%',
                                                            float: 'right',
-                                                           width: '51%',
                                                            border: 'none',
                                                            borderRadius: '4px',
-                                                           backgroundColor: '#a8ffb7',
                                                            margin: '5px',
                                                        }}>
-                                    {message.content}
+                                    <Message message={{
+                                        content: message.content,
+                                        timestamp: message.timestamp,
+                                        backgroundColor: '#a8ffb7'
+                                    }}/>
                                 </ListGroup.Item>
                             } else {
                                 return <ListGroup.Item id={i}
                                                        style={{
+                                                           width: '65%',
                                                            float: 'left',
-                                                           width: '51%',
                                                            border: 'none',
                                                            borderRadius: '4px',
-                                                           backgroundColor: '#ccffa8',
                                                            margin: '5px',
                                                        }}>
-                                    {message.content}</ListGroup.Item>
+                                    <Message message={{
+                                        content: message.content,
+                                        timestamp: message.timestamp,
+                                        backgroundColor: '#ccffa8'
+                                    }}/>
+                                </ListGroup.Item>
                             }
                         })}
                         <div ref={chatEnd} style={{float: 'left',}}/>
