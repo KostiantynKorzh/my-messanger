@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from "react";
 import UserHeader from "./UserHeader";
 import UserService from '../../service/user-service';
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
-
-let stompClient = null;
+import {ListGroup, Card} from "react-bootstrap";
 
 const Main = () => {
 
@@ -22,11 +19,16 @@ const Main = () => {
     return (
         <div>
             <UserHeader/>
-            {users.map(user =>
-                <div>
-                    <a href={`/chat/${user.id}`}>{user.username}</a>
-                </div>
-            )}
+            <Card>
+                <Card.Header className="text-center">vvvvvv You can chat with them vvvvvv</Card.Header>
+                <ListGroup>
+                    {users.map(user =>
+                        <ListGroup.Item action href={`/chat/${user.id}`} className="text-center">
+                            {user.username}
+                        </ListGroup.Item>
+                    )}
+                </ListGroup>
+            </Card>
         </div>
     );
 

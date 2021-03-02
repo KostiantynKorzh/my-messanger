@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import Moment from 'react-moment';
+import Moment from "react-moment";
 
 const Message = (props) => {
 
@@ -16,18 +16,30 @@ const Message = (props) => {
     }
 
     return (
-         <span id="msgDiv" style={{
+        <div id="msgDiv" style={{
             display: 'block',
-            // backgroundColor: `${props.message.backgroundColor}`,
+            backgroundColor: `${props.message.backgroundColor}`,
             padding: '1%',
             borderRadius: '4px',
             lineHeight: '1.7em',
-            paddingLeft: '2%',
-        }}>{props.message.content} <Moment style={{
-            color: 'gray',
-            fontSize: '0.7em',
-            marginLeft: '2%',
-        }} format="HH:MM">{props.message.timestamp}</Moment></span>
+            whiteSpace: 'pre-wrap',
+            overflowWrap: 'break-word',
+            // paddingLeft: '2%',
+        }}>
+            <div style={{
+                display: 'inline',
+                // border: '3px solid red',
+                whiteSpace: 'pre-wrap',
+                overflowWrap: 'break-word',
+            }}>{props.message.content}
+                <Moment style={{
+                    // display: 'inline',
+                    color: 'gray',
+                    fontSize: '0.7em',
+                    marginLeft: '2%',
+                }} format="HH:MM">{props.message.timestamp}</Moment>
+            </div>
+        </div>
     );
 
 };

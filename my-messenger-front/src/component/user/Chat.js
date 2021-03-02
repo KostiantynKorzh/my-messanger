@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import UserHeader from "./UserHeader";
-import {Container, Button, Form, ListGroup} from "react-bootstrap";
+import {Container, Button, Form, ListGroup, Col, Row} from "react-bootstrap";
 import ChatService from '../../service/chat-service';
 import UserService from '../../service/user-service';
 import Message from "./Message";
@@ -112,6 +112,8 @@ const Chat = (props) => {
                             display: 'block',
                             overflowY: "scroll",
                             height: '70vh',
+                            maxWidth: '100%',
+                            overflowX: 'hidden',
                         }}>
                         {chat.map((message, i) => {
                             if (message.senderId == senderId) {
@@ -150,29 +152,34 @@ const Chat = (props) => {
                     </ListGroup>
                 </Container>
 
-                <Form>
+                <Form style={{
+                    display: 'inline',
+                }}>
                     <Form.Group controlId="message">
-                        <Form.Control type="text"
-                                      placeholder="Your message"
-                                      value={msg}
-                                      onKeyPress={(e) => {
-                                          if (e.charCode == 13) {
-                                              send(e);
-                                          }
-                                      }}
-                                      onChange={(e) => {
-                                          setMsg(e.target.value);
-                                      }}/>
+                        <Row>
+                            <Col sm={11}>
+                                <Form.Control type="text"
+                                              placeholder="Your message"
+                                              value={msg}
+                                              onKeyPress={(e) => {
+                                                  if (e.charCode == 13) {
+                                                      send(e);
+                                                  }
+                                              }}
+                                              onChange={(e) => {
+                                                  setMsg(e.target.value);
+                                              }}/>
+                            </Col>
+                            <Button variant="primary"
+                                    onClick={(e) => send(e)}>
+                                Send
+                            </Button>
+                        </Row>
                     </Form.Group>
-                    <Button variant="primary"
-                            onClick={(e) => send(e)}>
-                        Submit
-                    </Button>
                 </Form>
             </div>
         </>
-    )
-        ;
+    );
 
 };
 
